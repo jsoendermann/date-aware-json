@@ -20,8 +20,8 @@
   "engines": {
     "node": ">=4.1"
   },
-  "main": "./lib/Semaphore.js",
-  "typings": "./lib/Semaphore.d.ts",
+  "main": "./lib/date-aware-json.js",
+  "typings": "./lib/date-aware-json.d.ts",
   "devDependencies": {
     "babel-cli": "^6.16.0",
     "babel-eslint": "^7.0.0",
