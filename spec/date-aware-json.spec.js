@@ -6,12 +6,31 @@ install();
 
 
 describe('date-aware-json', function () {
-  const { parse, stringify } = require('../lib/date-aware-json');
+  const {
+    parse,
+    stringify,
+    monkeypatchJSON,
+    restoreJSON,
+  } = require('../lib/date-aware-json');
 
   it('should serialize & deserialize dates', async function () {
-    const o = parse(stringify({ a: { b: new Date(), c: '2000-01-01' } }));
+    const json = stringify({ a: { b: new Date(), c: '2000-01-01' } });
+    const objWithDateObjects = parse(json);
+    const objWithoutDateObjects = JSON.parse(json);
 
-    expect(o.a.b instanceof Date).toBeTruthy();
-    expect(o.a.c).toEqual('2000-01-01');
+    expect(objWithDateObjects.a.b instanceof Date).toBeTruthy();
+    expect(objWithDateObjects.a.c).toEqual('2000-01-01');
+    expect(objWithoutDateObjects.a.b instanceof Date).toBeFalsy();
+    expect(objWithoutDateObjects.a.c).toEqual('2000-01-01');
   });
+
+  it('should monkeypath JSON.parse', function () {
+    const obj = { date: new Date() };
+
+    expect(JSON.parse(JSON.stringify(obj)).date instanceof Date).toBeFalsy();
+    monkeypatchJSON();
+    expect(JSON.parse(JSON.stringify(obj)).date instanceof Date).toBeTruthy();
+    restoreJSON();
+    expect(JSON.parse(JSON.stringify(obj)).date instanceof Date).toBeFalsy();
+  })
 });
