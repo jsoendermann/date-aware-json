@@ -1,7 +1,5 @@
-src
-spec
-.babelrc
-.eslintrc.json
+index.spec.js
 .gitignore
 yarn.lock
 node_modules
+npm-debug.log
