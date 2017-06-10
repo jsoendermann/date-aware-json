@@ -1,20 +1,15 @@
 /* global describe, it, expect */
-/* eslint prefer-arrow-callback:0, func-names:0, global-require:0, import/no-extraneous-dependencies:0 */
-import install from 'jasmine-es6';
+/* eslint global-require:0 */
 
-install();
-
-
-describe('date-aware-json', function () {
+describe('date-aware-json', () => {
   const {
     parse,
-    stringify,
     monkeypatchJSON,
     restoreJSON,
-  } = require('../lib/date-aware-json');
+  } = require('.');
 
-  it('should serialize & deserialize dates', async function () {
-    const json = stringify({ a: { b: new Date(), c: '2000-01-01' } });
+  it('should serialize & deserialize dates', async () => {
+    const json = JSON.stringify({ a: { b: new Date(), c: '2000-01-01' } });
     const objWithDateObjects = parse(json);
     const objWithoutDateObjects = JSON.parse(json);
 
@@ -24,7 +19,7 @@ describe('date-aware-json', function () {
     expect(objWithoutDateObjects.a.c).toEqual('2000-01-01');
   });
 
-  it('should monkeypath JSON.parse', function () {
+  it('should monkeypath JSON.parse', () => {
     const obj = { date: new Date() };
 
     expect(JSON.parse(JSON.stringify(obj)).date instanceof Date).toBeFalsy();
@@ -32,5 +27,5 @@ describe('date-aware-json', function () {
     expect(JSON.parse(JSON.stringify(obj)).date instanceof Date).toBeTruthy();
     restoreJSON();
     expect(JSON.parse(JSON.stringify(obj)).date instanceof Date).toBeFalsy();
-  })
+  });
 });
